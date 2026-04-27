@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Profile</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1 class="title">Profile</h1>
+
+<div class="container">
+  <h2 id="username"></h2>
+  <p>Total Posts: <span id="postCount"></span></p>
+
+  <button onclick="changeUser()">Change Username</button>
+  <br><br>
+  <button onclick="goHome()">Back</button>
+</div>
+
+<script>
+let username = localStorage.getItem("username") || "User";
+let posts = JSON.parse(localStorage.getItem("posts")) || [];
+
+document.getElementById("username").innerText = username;
+document.getElementById("postCount").innerText = posts.length;
+
+function changeUser() {
+  let newName = prompt("Enter new username:");
+  if (!newName) return;
+
+  localStorage.setItem("username", newName);
+  location.reload();
+}
+
+function goHome() {
+  window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>

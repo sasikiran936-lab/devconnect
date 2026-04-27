@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DevConnect</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1 class="title">DevConnect</h1>
+<div class="topbar">
+  <button onclick="toggleMode()">
+    <i class="fa-solid fa-moon"></i>
+  </button>
+  <button onclick="goProfile()">
+    <i class="fa-solid fa-user"></i>
+  </button>
+</div>
+<div class="container">
+  <div class="create">
+    <textarea id="postInput" placeholder="What's on your mind?"></textarea>
+    <button onclick="addPost()">
+      <i class="fa-solid fa-paper-plane"></i> Post
+    </button>
+  </div>
+  <div id="feed"></div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
