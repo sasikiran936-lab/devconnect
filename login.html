@@ -4,14 +4,14 @@
 
 <h2>Login</h2>
 
-<input id="name">
+<input id="name" placeholder="Username">
 <button onclick="login()">Login</button>
 
 <script>
 function login(){
-  let n=name.value;
+  let n = name.value;
   if(!n) return;
-  localStorage.setItem("username",n);
+  localStorage.setItem("username", n);
   location.href="index.html";
 }
 </script>
