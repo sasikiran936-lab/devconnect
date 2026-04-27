@@ -1,16 +1,14 @@
-let username = localStorage.getItem("username") || "";
-
-if (!username) {
-  username = prompt("Enter your username:");
-  localStorage.setItem("username", username);
-}
-
 let posts = JSON.parse(localStorage.getItem("posts")) || [];
+let username = localStorage.getItem("username") || prompt("Enter username:");
 
+localStorage.setItem("username", username);
+
+/* SAVE */
 function save() {
   localStorage.setItem("posts", JSON.stringify(posts));
 }
 
+/* RENDER */
 function render() {
   let feed = document.getElementById("feed");
   feed.innerHTML = "";
@@ -21,10 +19,12 @@ function render() {
 
     div.innerHTML = `
       <h4>${post.user}</h4>
-<p>${post.text}</p>
-<small>${post.time}</small>
+      <p>${post.text}</p>
+      <small>${post.time}</small>
 
-      <div class="actions">
+      ${post.image ? `<img src="${post.image}" class="post-img">` : ""}
+
+      <div>
         <button onclick="likePost(${index})">
           <i class="fa-solid fa-heart"></i> ${post.likes}
         </button>
@@ -34,28 +34,22 @@ function render() {
         </button>
       </div>
 
-      <div class="comment-box">
-        <input id="comment-${index}" placeholder="Write a comment">
-        <button onclick="addComment(${index})">
-          <i class="fa-solid fa-paper-plane"></i>
-        </button>
+      <div>
+        <input id="comment-${index}" placeholder="Comment">
+        <button onclick="addComment(${index})">Add</button>
       </div>
 
       <div>
         ${(post.comments || []).map((c, i) => `
-  <p class="comment">
-    <i class="fa-solid fa-comment"></i> 
-    ${c}
+          <p class="comment">
+            ${c}
 
-    <button onclick="editComment(${index}, ${i})">
-      <i class="fa-solid fa-pen"></i>
-    </button>
-
-    <button onclick="deleteComment(${index}, ${i})">
-      <i class="fa-solid fa-trash"></i>
-    </button>
-  </p>
-`).join("")}
+            <span>
+              <button onclick="editComment(${index}, ${i})">Edit</button>
+              <button onclick="deleteComment(${index}, ${i})">X</button>
+            </span>
+          </p>
+        `).join("")}
       </div>
     `;
 
@@ -63,84 +57,95 @@ function render() {
   });
 }
 
+/* ADD POST */
 function addPost() {
-  let input = document.getElementById("postInput");
-  let text = input.value.trim();
+  let text = document.getElementById("postInput").value.trim();
+  let file = document.getElementById("imageInput").files[0];
 
-  if (!text) return;
+  if (!text && !file) return;
 
-  posts.unshift({
-  text,
-  likes: 0,
-  comments: [],
-  user: username,
-  time: new Date().toLocaleString()
-});
+  if (file) {
+    let reader = new FileReader();
+    reader.onload = function () {
+      posts.unshift({
+        text,
+        image: reader.result,
+        likes: 0,
+        comments: [],
+        user: username,
+        time: new Date().toLocaleString()
+      });
+      save();
+      render();
+    };
+    reader.readAsDataURL(file);
+  } else {
+    posts.unshift({
+      text,
+      image: null,
+      likes: 0,
+      comments: [],
+      user: username,
+      time: new Date().toLocaleString()
+    });
+    save();
+    render();
+  }
 
-  save();
-  render();
-  input.value = "";
+  document.getElementById("postInput").value = "";
+  document.getElementById("imageInput").value = "";
 }
 
-function likePost(index) {
-  posts[index].likes++;
-  save();
-  render();
-}
-
-function deletePost(index) {
-  posts.splice(index, 1);
-  save();
-  render();
-}
-
-function addComment(index) {
-  let input = document.getElementById(`comment-${index}`);
-  let text = input.value.trim();
-
-  if (!text) return;
-
-  posts[index].comments.push(text);
-  save();
-  render();
-}
-function deleteComment(postIndex, commentIndex) {
-  posts[postIndex].comments.splice(commentIndex, 1);
-  save();
-  render();
-}
-
-function editComment(postIndex, commentIndex) {
-  let current = posts[postIndex].comments[commentIndex];
-
-  let updated = prompt("Edit comment:", current);
-
-  if (!updated) return;
-
-  posts[postIndex].comments[commentIndex] = updated;
+/* LIKE */
+function likePost(i) {
+  posts[i].likes++;
   save();
   render();
 }
 
-function changeUser() {
-  let newName = prompt("Enter new username:");
-  if (!newName) return;
-
-  username = newName;
-  localStorage.setItem("username", username);
+/* DELETE POST */
+function deletePost(i) {
+  posts.splice(i, 1);
+  save();
+  render();
 }
+
+/* COMMENTS */
+function addComment(i) {
+  let input = document.getElementById(`comment-${i}`);
+  if (!input.value.trim()) return;
+
+  posts[i].comments.push(input.value);
+  save();
+  render();
+}
+
+function deleteComment(p, c) {
+  posts[p].comments.splice(c, 1);
+  save();
+  render();
+}
+
+function editComment(p, c) {
+  let val = prompt("Edit:", posts[p].comments[c]);
+  if (!val) return;
+
+  posts[p].comments[c] = val;
+  save();
+  render();
+}
+
+/* MODE */
 function toggleMode() {
   document.body.classList.toggle("light");
-
-  let mode = document.body.classList.contains("light") ? "light" : "dark";
-  localStorage.setItem("mode", mode);
+  localStorage.setItem("mode", document.body.classList.contains("light"));
 }
 
-/* Load saved mode */
-let savedMode = localStorage.getItem("mode");
-if (savedMode === "light") {
+if (localStorage.getItem("mode") === "true") {
   document.body.classList.add("light");
 }
+
+/* PROFILE NAV */
 function goProfile() {
   window.location.href = "profile.html";
 }
