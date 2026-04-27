@@ -4,23 +4,14 @@
   <title>DevConnect</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- TOP RIGHT -->
 <div class="topbar">
-  <button onclick="toggleMode()">
-    <i class="fa-solid fa-moon"></i>
-  </button>
-
-  <button onclick="goProfile()">
-    <i class="fa-solid fa-user"></i>
-  </button>
+  <button onclick="toggleMode()"><i class="fa-solid fa-moon"></i></button>
 </div>
 
 <h1 class="title">DevConnect</h1>
@@ -29,18 +20,21 @@
 
   <div class="create">
     <textarea id="postInput" placeholder="What's on your mind?"></textarea>
-
-    <input type="file" id="imageInput" accept="image/*">
-
-    <button onclick="addPost()">
-      <i class="fa-solid fa-paper-plane"></i> Post
-    </button>
+    <input type="file" id="imageInput">
+    <button onclick="addPost()">Post</button>
   </div>
 
   <div id="feed"></div>
 
 </div>
 
+<!-- MODAL -->
+<div id="modal" class="modal" onclick="closeModal()">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <div id="modalBody"></div>
+  </div>
+</div>
+
 <script src="script.js"></script>
 </body>
-</html>
+  </html>
