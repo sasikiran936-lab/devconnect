@@ -45,7 +45,6 @@ textarea, input {
 button {
   margin-top: 5px;
   padding: 6px 10px;
-  cursor: pointer;
 }
 
 .comment-box {
@@ -59,7 +58,6 @@ button {
   margin-top: 5px;
 }
 
-/* modal */
 .modal {
   display: none;
   position: fixed;
@@ -77,7 +75,6 @@ button {
   width: 90%;
 }
 
-/* notification */
 .notify {
   position: fixed;
   bottom: 10px;
