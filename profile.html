@@ -11,15 +11,9 @@
 
 <div class="container">
 
-  <img id="pic" width="80" style="border-radius:50%"><br>
-
   <h2 id="user"></h2>
   <p>Posts: <span id="count"></span></p>
 
-  <input type="file" id="upload">
-  <button onclick="savePic()">Save Photo</button>
-
-  <button onclick="changeUser()">Change Name</button>
   <button onclick="logout()">Logout</button>
   <button onclick="goHome()">Back</button>
 
@@ -29,39 +23,18 @@
 let u = localStorage.getItem("username");
 let posts = JSON.parse(localStorage.getItem("posts"))||[];
 
-if(!u) location.href="login.html";
+if(!u) window.location.href="login.html";
 
 user.innerText=u;
 count.innerText=posts.filter(p=>p.user===u).length;
 
-let pic = localStorage.getItem("profilePic");
-if(pic) document.getElementById("pic").src=pic;
-
-function savePic(){
-  let f = upload.files[0];
-  if(!f) return;
-  let r=new FileReader();
-  r.onload=()=>{
-    localStorage.setItem("profilePic", r.result);
-    pic.src=r.result;
-  };
-  r.readAsDataURL(f);
-}
-
-function changeUser(){
-  let n=prompt("New name:");
-  if(!n) return;
-  localStorage.setItem("username",n);
-  location.reload();
-}
-
 function logout(){
   localStorage.removeItem("username");
-  location.href="login.html";
+  window.location.href="login.html";
 }
 
 function goHome(){
-  location.href="index.html";
+  window.location.href="index.html";
 }
 </script>
 
