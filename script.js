@@ -34,10 +34,12 @@ function render() {
         </button>
       </div>
 
-      <div>
-        <input id="comment-${index}" placeholder="Comment">
-        <button onclick="addComment(${index})">Add</button>
-      </div>
+      <div class="comment-box">
+  <input id="comment-${index}" placeholder="Write a comment">
+  <button onclick="addComment(${index})">
+    <i class="fa-solid fa-paper-plane"></i>
+  </button>
+</div>
 
       <div>
         ${(post.comments || []).map((c, i) => `
