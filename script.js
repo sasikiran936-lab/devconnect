@@ -24,7 +24,7 @@ function render() {
 
       ${post.image ? `<img src="${post.image}" class="post-img">` : ""}
 
-      <div>
+      <div class="actions">
         <button onclick="likePost(${index})">
           <i class="fa-solid fa-heart"></i> ${post.likes}
         </button>
@@ -35,31 +35,29 @@ function render() {
       </div>
 
       <div class="comment-box">
-  <input id="comment-${index}" placeholder="Write a comment">
-  <button onclick="addComment(${index})">
-    <i class="fa-solid fa-paper-plane"></i>
-  </button>
-</div>
-
-      <div>
-        ${(post.comments || []).map((c, i) => `
-  <div class="comment">
-    <span class="comment-text">
-      <i class="fa-solid fa-comment"></i> ${c}
-    </span>
-
-    <div class="comment-actions">
-      <button onclick="editComment(${index}, ${i})">
-        <i class="fa-solid fa-pen"></i>
-      </button>
-
-      <button onclick="deleteComment(${index}, ${i})">
-        <i class="fa-solid fa-trash"></i>
-      </button>
-    </div>
-  </div>
-`).join("")}
+        <input id="comment-${index}" placeholder="Write comment">
+        <button onclick="addComment(${index})">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
       </div>
+
+      ${(post.comments || []).map((c, i) => `
+        <div class="comment">
+          <span class="comment-text">
+            <i class="fa-solid fa-comment"></i> ${c}
+          </span>
+
+          <div class="comment-actions">
+            <button onclick="editComment(${index}, ${i})">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+
+            <button onclick="deleteComment(${index}, ${i})">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      `).join("")}
     `;
 
     feed.appendChild(div);
@@ -144,7 +142,7 @@ function editComment(p, c) {
   render();
 }
 
-/* MODE */
+/* TOGGLE MODE */
 function toggleMode() {
   document.body.classList.toggle("light");
   localStorage.setItem("mode", document.body.classList.contains("light"));
@@ -154,7 +152,7 @@ if (localStorage.getItem("mode") === "true") {
   document.body.classList.add("light");
 }
 
-/* PROFILE NAV */
+/* PROFILE */
 function goProfile() {
   window.location.href = "profile.html";
 }
