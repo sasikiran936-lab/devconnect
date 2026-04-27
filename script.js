@@ -41,15 +41,22 @@ function render() {
 
       <div>
         ${(post.comments || []).map((c, i) => `
-          <p class="comment">
-            ${c}
+  <div class="comment">
+    <span class="comment-text">
+      <i class="fa-solid fa-comment"></i> ${c}
+    </span>
 
-            <span>
-              <button onclick="editComment(${index}, ${i})">Edit</button>
-              <button onclick="deleteComment(${index}, ${i})">X</button>
-            </span>
-          </p>
-        `).join("")}
+    <div class="comment-actions">
+      <button onclick="editComment(${index}, ${i})">
+        <i class="fa-solid fa-pen"></i>
+      </button>
+
+      <button onclick="deleteComment(${index}, ${i})">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+    </div>
+  </div>
+`).join("")}
       </div>
     `;
 
