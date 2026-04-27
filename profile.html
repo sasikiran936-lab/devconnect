@@ -2,39 +2,149 @@
 <html>
 <head>
   <title>Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    .profile-card {
+      text-align: center;
+    }
+
+    .profile-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+      border: 3px solid rgba(255,255,255,0.3);
+    }
+
+    .light .profile-img {
+      border: 3px solid rgba(0,0,0,0.2);
+    }
+
+    .upload {
+      margin-top: 10px;
+    }
+  </style>
 </head>
 
 <body>
 
+<div class="topbar">
+  <button onclick="goHome()">🏠</button>
+</div>
+
 <h1 class="title">Profile</h1>
 
 <div class="container">
-  <h2 id="name"></h2>
-  <p>Total Posts: <span id="count"></span></p>
 
-  <button onclick="changeUser()">Change Username</button>
-  <button onclick="goBack()">Back</button>
+  <!-- PROFILE CARD -->
+  <div class="post profile-card">
+
+    <img id="profilePic" class="profile-img" src="https://via.placeholder.com/100">
+
+    <h2 id="username"></h2>
+    <p id="joinDate"></p>
+    <p>Total Posts: <span id="postCount"></span></p>
+
+    <!-- Upload -->
+    <input type="file" id="imgUpload" class="upload" accept="image/*">
+
+    <button onclick="uploadProfilePic()">Upload Photo</button>
+    <button onclick="changeUser()">Change Username</button>
+    <button onclick="logout()">Logout</button>
+
+  </div>
+
+  <!-- USER POSTS -->
+  <h3>Your Posts</h3>
+  <div id="userPosts"></div>
+
 </div>
 
 <script>
-let name = localStorage.getItem("username");
+let username = localStorage.getItem("username");
 let posts = JSON.parse(localStorage.getItem("posts")) || [];
+let profilePic = localStorage.getItem("profilePic");
 
-document.getElementById("name").innerText = name;
-document.getElementById("count").innerText = posts.length;
+/* Redirect if not logged in */
+if (!username) {
+  window.location.href = "login.html";
+}
 
+/* Set profile data */
+document.getElementById("username").innerText = username;
+
+/* Profile picture */
+if (profilePic) {
+  document.getElementById("profilePic").src = profilePic;
+}
+
+/* Post count */
+let userPosts = posts.filter(p => p.user === username);
+document.getElementById("postCount").innerText = userPosts.length;
+
+/* Join date */
+let join = userPosts.length
+  ? userPosts[userPosts.length - 1].time
+  : new Date();
+
+document.getElementById("joinDate").innerText =
+  "Joined: " + new Date(join).toDateString();
+
+/* Show user posts */
+let container = document.getElementById("userPosts");
+
+userPosts.slice().reverse().forEach(p => {
+  let div = document.createElement("div");
+  div.className = "post";
+
+  div.innerHTML = `
+    <p>${p.text}</p>
+    <small>${new Date(p.time).toLocaleString()}</small>
+    ${p.image ? `<img src="${p.image}" class="post-img">` : ""}
+  `;
+
+  container.appendChild(div);
+});
+
+/* Upload profile picture */
+function uploadProfilePic() {
+  let file = document.getElementById("imgUpload").files[0];
+  if (!file) return;
+
+  let reader = new FileReader();
+
+  reader.onload = function () {
+    localStorage.setItem("profilePic", reader.result);
+    document.getElementById("profilePic").src = reader.result;
+  };
+
+  reader.readAsDataURL(file);
+}
+
+/* Change username */
 function changeUser() {
   let n = prompt("New username:");
   if (!n) return;
+
   localStorage.setItem("username", n);
   location.reload();
 }
 
-function goBack() {
+/* Logout */
+function logout() {
+  localStorage.removeItem("username");
+  window.location.href = "login.html";
+}
+
+/* Navigation */
+function goHome() {
   window.location.href = "index.html";
 }
 </script>
 
 </body>
-</html>
+  </html>
