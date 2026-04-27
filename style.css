@@ -88,3 +88,45 @@ button {
   display: flex;
   justify-content: space-between;
 }
+/* COMMENT INPUT ROW */
+.comment-box {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.comment-box input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+}
+
+/* COMMENT ITEM */
+.comment {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* COMMENT TEXT */
+.comment-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ACTION BUTTONS */
+.comment-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.comment-actions button {
+  padding: 4px 6px;
+  font-size: 12px;
+}
