@@ -1,7 +1,8 @@
 let username = localStorage.getItem("username");
 
+/* 🔒 FIX: redirect properly */
 if (!username) {
-  location.href = "login.html";
+  window.location.replace("login.html");
 }
 
 let posts = JSON.parse(localStorage.getItem("posts")) || [];
@@ -26,6 +27,8 @@ function timeAgo(date) {
 /* RENDER */
 function render() {
   let feed = document.getElementById("feed");
+  if (!feed) return;
+
   feed.innerHTML = "";
 
   posts.forEach((p, i) => {
@@ -64,11 +67,15 @@ function render() {
   });
 }
 
-/* ADD POST */
+/* NAVIGATION FIX */
+function goProfile() {
+  window.location.href = "profile.html";
+}
+
+/* REST SAME */
 function addPost() {
   let text = postInput.value.trim();
   let file = imageInput.files[0];
-
   if (!text && !file) return;
 
   let reader = new FileReader();
@@ -82,8 +89,7 @@ function addPost() {
       likedBy: [],
       comments: []
     });
-    save();
-    render();
+    save(); render();
   };
 
   if (file) reader.readAsDataURL(file);
@@ -93,17 +99,13 @@ function addPost() {
   imageInput.value = "";
 }
 
-/* LIKE */
 function likePost(i) {
   let idx = posts[i].likedBy.indexOf(username);
   if (idx === -1) posts[i].likedBy.push(username);
   else posts[i].likedBy.splice(idx,1);
-
-  notify("Like updated");
   save(); render();
 }
 
-/* EDIT/DELETE */
 function editPost(i) {
   let t = prompt("Edit:", posts[i].text);
   if (!t) return;
@@ -113,15 +115,12 @@ function editPost(i) {
 
 function deletePost(i) {
   posts.splice(i,1);
-  notify("Deleted");
   save(); render();
 }
 
-/* COMMENTS */
 function addComment(i) {
   let val = document.getElementById("c-"+i).value;
   if (!val) return;
-
   posts[i].comments.push(val);
   save(); render();
 }
@@ -138,7 +137,6 @@ function deleteComment(i,j){
   save(); render();
 }
 
-/* MODAL */
 function openModal(i){
   let p = posts[i];
   modalBody.innerHTML = `
@@ -153,23 +151,8 @@ function closeModal(){
   modal.style.display="none";
 }
 
-/* MODE */
 function toggleMode(){
   document.body.classList.toggle("light");
-}
-
-/* NAV */
-function goProfile(){
-  location.href="profile.html";
-}
-
-/* NOTIFY */
-function notify(msg){
-  let d=document.createElement("div");
-  d.className="notify";
-  d.innerText=msg;
-  document.body.appendChild(d);
-  setTimeout(()=>d.remove(),1500);
 }
 
 render();
