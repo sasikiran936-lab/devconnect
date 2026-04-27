@@ -134,6 +134,8 @@ body.light .actions button {
   padding: 8px;
   border-radius: 6px;
   border: none;
+
+  box-sizing: border-box;   /* prevents overflow */
 }
 
 /* COMMENTS */
@@ -162,3 +164,14 @@ body.light .actions button {
 .comment-actions button:hover {
   color: #a78bfa;
 }
+.create {
+  overflow: hidden;
+}textarea {
+  width: 100%;
+  height: 80px;
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  
+  box-sizing: border-box;  
+    }
